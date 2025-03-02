@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  backend:
+    image: bhargaw21/email-writer-backend
+    build:
+      context: ./backend/Email-Writer
+      dockerfile: Dockerfile
+      platforms:
+        - "linux/amd64"  # Ensuring compatibility
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - app-network
+
+  frontend:
+    image: bhargaw21/email-writer-frontend
+    build:
+      context: ./frontend/email-writer-react
+      dockerfile: Dockerfile
+      platforms:
+        - "linux/amd64"  # Ensuring compatibility
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
